@@ -1,0 +1,4 @@
+
+- intial project setup, with tailwind, daisy and push it on github
+- todo: update tab icon + title
+- todo: install and setup react router dom
