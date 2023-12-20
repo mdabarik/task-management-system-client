@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Logo from "./../../assets/navbar-logo.png";
 import "./Navbar.css";
 import Box from '@mui/material/Box';
@@ -57,8 +57,11 @@ const Navbar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
             >
-                <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Name</Typography>
+                <MenuItem sx={{ display: 'flex', flexDirection: 'column' }} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Md. A. Barik</Typography>
+                </MenuItem>
+                <MenuItem sx={{ display: 'flex', flexDirection: 'column' }} onClick={handleCloseUserMenu}>
+                    <Button>Logout</Button>
                 </MenuItem>
             </Menu>
         </Box>
@@ -78,8 +81,11 @@ const Navbar = () => {
                         </div>
                         <div className="flex-1">
                             <div className="flex items-center gap-2">
-                                <img className="w-[50px]" src={Logo} alt="logo" />
-                                <span className="text-xl font-bold">TaskMaster Pro</span>
+                                <Link to="/" className="flex items-center gap-2">
+                                    <img className="w-[50px]" src={Logo} alt="logo" />
+                                    <span className="text-xl font-bold">TaskMaster Pro</span>
+                                </Link>
+
                             </div>
                         </div>
                         <div className="flex-none hidden lg:block">
