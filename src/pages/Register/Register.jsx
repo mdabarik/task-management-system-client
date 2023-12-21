@@ -10,8 +10,6 @@ import AOS from 'aos';
 import { imageUpload } from "../../api/utils";
 import GoogleSignIn from "../../components/GoogleSignIn/GoogleSignIn";
 import { Button } from "@mui/material";
-// import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-
 
 
 const Register = () => {
@@ -74,7 +72,6 @@ const Register = () => {
         } catch (err) {
             setSubmitting(false)
         }
-        // console.log(photoURL);
 
         const userData = {
             userName, userEmail, userPassword, photoURL, userRole: 'normal',
@@ -82,7 +79,6 @@ const Register = () => {
         };
         registerUser(userEmail, userPassword)
             .then(res => {
-                // console.log('inside register.jsx inside handeRegister', res);
                 toast.success("Registration successful");
                 updateProfile(res.user, {
                     displayName: userName,
@@ -115,30 +111,33 @@ const Register = () => {
     return (
         <div className="w-[90%] md:w-full mx-auto" data-aos="zoom-in">
             <Helmet>
-                <title>Register | Product Pulse</title>
+                <title>Register | TaskManager Pro</title>
             </Helmet>
-            <div className="py-10 md:py-20 space-y-5">
-                <h2>Register Now</h2>
+            <div className="py-10 flex flex-col md:py-20 space-y-5">
+                <h2 className="text-center text-3xl">Register Now</h2>
 
-                <div className="w-full md:w-1/2 mx-auto space-y-4 text-center">
+                <div className="w-full mx-auto flex flex-col items-center justify-center space-y-4 text-center">
 
-                <form onSubmit={handleRegister} className="mt-8 mb-2 w-[95%] md:w-[80%] lg:w-[60%]" autoComplete="off" >
-                    <div className="mb-4 flex flex-col gap-6">
-                        <div className="relative h-11 w-full min-w-[200px]">
-                            <input onChange={e => setUserName(e.target.value)} type="text" placeholder="User name" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
+                    <form onSubmit={handleRegister} className="mt-8 mb-2 w-[95%] md:w-[80%] lg:w-[60%]" autoComplete="off" >
+                        <div className="mb-4 flex flex-col gap-6">
+                            <div className="relative h-11 w-full min-w-[200px]">
+                                <input onChange={e => setUserName(e.target.value)} type="text" placeholder="User name" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
+                            </div>
+                            <div className="relative h-11 w-full min-w-[200px]">
+                                <input onChange={e => setUserEmail(e.target.value)} type="email" placeholder="Email" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
+                            </div>
+                            <div className="relative h-11 w-full min-w-[200px]">
+                                <input onChange={e => setUserPassword(e.target.value)} type="password" placeholder="Password" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
+                            </div>
+                            <div className="relative h-11 w-full min-w-[200px]">
+                                <input onChange={e => setImageFile(e.target.files[0])} type="file" accept='image/*' placeholder="Enter photo url" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
+                            </div>
+                            <button type="submit" className="mt-6 flex items-center justify-center w-full bg-[#db332a] py-3 px-6 text-center  text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="submit" data-ripple-light="true">
+                                <span className="ml-3">Register Now</span>
+                            </button>
                         </div>
-                        <div className="relative h-11 w-full min-w-[200px]">
-                            <input onChange={e => setUserEmail(e.target.value)} type="email" placeholder="Email" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
-                        </div>
-                        <div className="relative h-11 w-full min-w-[200px]">
-                            <input onChange={e => setUserPassword(e.target.value)} type="password" placeholder="Password" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
-                        </div>
-                        <div className="relative h-11 w-full min-w-[200px]">
-                            <input onChange={e => setImageFile(e.target.files[0])} type="file" accept='image/*' placeholder="Enter photo url" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
-                        </div>
-                    </div>
-                </form>
-
+                    </form>
+                    {/* 
                     {submitting
                         ? <Button disabled variant="contained" size="large" sx={{ width: '100%' }}>
                             <span className="loading loading-bars loading-md text-acent"></span>
@@ -147,7 +146,7 @@ const Register = () => {
                         : <Button onClick={handleRegister} variant="contained" size="large" sx={{ width: '100%' }}>
                             <span className="ml-1 font-bold">Register Now</span>
                         </Button>
-                    }
+                    } */}
 
                     {errorMsg && <InvalidFormMsg>{errorMsg}</InvalidFormMsg>}
 
@@ -166,15 +165,3 @@ const Register = () => {
 
 export default Register;
 
-
-// import React from 'react';
-
-// const Register = () => {
-//     return (
-//         <div>
-            
-//         </div>
-//     );
-// };
-
-// export default Register;

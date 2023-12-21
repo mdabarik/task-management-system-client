@@ -13,6 +13,8 @@ import { Button } from "@mui/material";
 
 const Login = () => {
 
+    const {loading} = useAuth();
+
     useEffect(() => {
         AOS.init()
     }, [])
@@ -25,7 +27,9 @@ const Login = () => {
     const [submitting, setSubmitting] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const from = location?.state?.from?.pathname || '/';
+    console.log(from, 'aldkfja daflk adlfk aldfkj');
 
+    if (loading) return "loading..."
     if (user) {
         if (from == '/dashboard') {
             return <Navigate to="/" />
@@ -51,10 +55,8 @@ const Login = () => {
                 setSubmitting(false)
                 // console.log('inside handle login', res);
                 toast.success('Login successful')
-                if (from == '/dashboard') {
-                    return navigate('/')
-                }
                 navigate(from);
+                console.log(from, 'from...');
             })
             .catch(err => {
                 // console.log('inside handle login', err);
@@ -65,13 +67,13 @@ const Login = () => {
     }
 
     return (
-        <div className="w-[90%] mx-auto md:w-full" data-aos="zoom-in">
+        <div className=" md:w-full" data-aos="zoom-in">
             <Helmet>
-                <title>Login | Product Pulse</title>
+                <title>Login | TaskManager Pro</title>
             </Helmet>
             <div className="py-10 md:py-20 space-y-5">
-                <h2>Login Now</h2>
-                <form onSubmit={handleLogin} className="mt-8 mb-2 w-[95%] md:w-[80%] lg:w-[60%]" autoComplete="off" >
+                <h2 className="text-center text-3xl">Login Now</h2>
+                <form onSubmit={handleLogin} className="mt-8 mb-2 mx-auto w-[95%] md:w-[80%] lg:w-[60%]" autoComplete="off" >
                     <div className="mb-4 flex flex-col gap-6">
                         <div className="relative h-11 w-full min-w-[200px]">
                             <input onChange={e => setUserEmail(e.target.value)} type="email" placeholder="Email" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
@@ -88,7 +90,7 @@ const Login = () => {
                     </div>
                     <button className="mt-6 flex items-center justify-center w-full bg-[#db332a] py-3 px-6 text-center  text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="submit" data-ripple-light="true">
                         <CiLogin className="text-xl"></CiLogin>
-                        <span className="ml-3">Login</span>
+                        <span className="ml-3">Login Now</span>
                     </button>
 
                     {
@@ -103,7 +105,7 @@ const Login = () => {
                         </Link>
                     </div>
                 </form>
-                {submitting ? (
+                {/* {submitting ? (
                         <Button disabled variant="contained" size="large" sx={{ width: '100%' }}>
                             <span className="loading loading-bars loading-md text-acent"></span>
                             <span className="ml-1 font-bold">Validating</span>
@@ -118,7 +120,7 @@ const Login = () => {
 
                     <div className="text-center text-blue-600 underline">
                         <Link to="/register">{"Don't have an account? Register"}</Link>
-                    </div>
+                    </div> */}
 
                     <div className="flex items-center justify-center text-center">
                         <GoogleSignIn />

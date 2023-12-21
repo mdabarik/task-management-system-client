@@ -5,15 +5,15 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 
 const Navbar = () => {
-
+    const { logOut, user } = useAuth();
     const [anchorElUser, setAnchorElUser] = useState(null);
 
     const handleOpenUserMenu = (event) => {
@@ -24,47 +24,63 @@ const Navbar = () => {
         setAnchorElUser(null);
     };
 
+    const handleLogout = () => {
+        logOut()
+            .then(res => {
+                console.log('logged out');
+            })
+            .catch(err => {
+                console.log("error");
+            })
+    }
+
     const navLinks = <>
         <li>
             <NavLink to="/">
                 <span>Home</span>
             </NavLink>
         </li>
-        <li>
-            <NavLink to="/register">
-                <span>Register</span>
-            </NavLink>
-        </li>
-        <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-            </Tooltip>
-            <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-            >
-                <MenuItem sx={{ display: 'flex', flexDirection: 'column' }} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Md. A. Barik</Typography>
-                </MenuItem>
-                <MenuItem sx={{ display: 'flex', flexDirection: 'column' }} onClick={handleCloseUserMenu}>
-                    <Button>Logout</Button>
-                </MenuItem>
-            </Menu>
-        </Box>
+        {
+            user ? "" : <li>
+                <NavLink to="/register">
+                    <span>Register</span>
+                </NavLink>
+            </li>
+        }
+        {
+            user ?
+                <Box sx={{ flexGrow: 0 }}>
+                    <Tooltip title="Open settings">
+                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                            <img className="w-[40px] rounded-full" src={user?.photoURL} alt="photo" />
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        sx={{ mt: '45px' }}
+                        id="menu-appbar"
+                        anchorEl={anchorElUser}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                    >
+                        <MenuItem sx={{ display: 'flex', flexDirection: 'column' }} onClick={handleCloseUserMenu}>
+                            <Typography textAlign="center">Md. A. Barik</Typography>
+                        </MenuItem>
+                        <MenuItem sx={{ display: 'flex', flexDirection: 'column' }} onClick={handleCloseUserMenu}>
+                            <Button onClick={handleLogout}>Logout</Button>
+                        </MenuItem>
+                    </Menu>
+                </Box> : ""
+        }
     </>
 
     return (
@@ -89,7 +105,7 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div className="flex-none hidden lg:block">
-                            <ul className="menu menu-horizontal">
+                            <ul className="menu menu-horizontal text-[14px]">
                                 {/* Navbar menu content here */}
                                 {navLinks}
                             </ul>
