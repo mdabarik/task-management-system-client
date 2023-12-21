@@ -17,7 +17,7 @@ const Banner = () => {
             <div className="h-[550px] w-full bg-[#00000090] text-white absolute top-0 left-0 flex  flex-col items-center justify-center space-y-5">
                 <h2 className="font-bold text-5xl ">TaskMaster Pro</h2>
                 <p className="text-center">Your Task Management and Productivity Optimization</p>
-                <Link to="/tasks-manager" className="bg-indigo-600 border-white border-2 text-lg px-6 py-2 rounded-full">
+                <Link to="/tasks-manager" className="btn btn-info text-whit border-2 text-lg px-6 py-2 rounded-full">
                     Let’s Explore
                 </Link>
                 {/* <Button sx={{borderRadius: '20px', paddingX: '30px', paddingY: '8px'}} variant="contained">Let's Explore</Button> */}

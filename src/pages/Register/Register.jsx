@@ -132,7 +132,7 @@ const Register = () => {
                             <div className="relative h-11 w-full min-w-[200px]">
                                 <input onChange={e => setImageFile(e.target.files[0])} type="file" accept='image/*' placeholder="Enter photo url" className="w-full px-4 py-2 rounded-md bg-transparent outline-none border-[1px]" required />
                             </div>
-                            <button type="submit" className="mt-6 flex items-center justify-center w-full bg-[#db332a] py-3 px-6 text-center  text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="submit" data-ripple-light="true">
+                            <button type="submit" className="mt-6 flex items-center justify-center w-full btn btn-info py-3 px-6 text-center  text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="submit" data-ripple-light="true">
                                 <span className="ml-3">Register Now</span>
                             </button>
                         </div>

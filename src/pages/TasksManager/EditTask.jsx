@@ -3,9 +3,13 @@ import Loader from "../../components/Shared/Loader";
 import useAuth from "../../hooks/useAuth";
 import TaskTable from "./TaskTable";
 import useAxiosPublic from "./../../hooks/useAxiosPublic";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 
-const TasksManager = () => {
+
+const EditTask = () => {
     const axiosPublic = useAxiosPublic();
     const { user, loading } = useAuth();
     const [errMsg, setErrMsg] = useState();
@@ -14,38 +18,65 @@ const TasksManager = () => {
     const [description, setDescription] = useState();
     const [deadline, setDeadline] = useState();
     const [priority, setPriority] = useState();
+    const navigate = useNavigate();
 
-    const handleTaskSubmit = () => {
+    const { id } = useParams();
+
+    const { data: task, isLoading, refetch } = useQuery({
+        queryKey: ['get-single-task', changed, user, id],
+        queryFn: async () => {
+            const { data } = await axiosPublic.get(`/task?id=${id}&email=${user?.email}`);
+            console.log('task found', data);
+            return data;
+        }
+    })
+
+    // console.log(task, 'task....');
+
+    if (isLoading) return <Loader></Loader>
+
+    const data = {
+        id,
+        title: title || task?.title,
+        description: description || task?.description,
+        deadline: deadline || task?.title,
+        priority: priority || task?.priority,
+    }
+
+    console.log(data, 'data...');
+
+
+    const handleTaskSubmit = async () => {
+        
         setErrMsg(null);
-        if (!title || title?.length <= 3) {
+        if (!data?.title || data?.title?.length <= 3) {
             setErrMsg("Task title must be longer than 3 chars");
             return;
         }
-        if (!description || description?.length <= 10) {
+        if (!data?.description || data?.description?.length <= 10) {
             setErrMsg("Task description must be longer than 9 chars");
             return;
         }
-        if (!deadline) {
+        if (!data?.deadline) {
             setErrMsg("Please select valid deadline");
             return;
         }
-        if (!priority || priority == '0') {
+        if (!data?.priority || priority == '0') {
             setErrMsg("Please select priority");
             return;
         }
-        const data = {
-            title, description, deadline, priority, status: 'ongoing', email: user?.email
-        }
-        
-        axiosPublic.post('/task', data)
-        .then(data => {
-            const res = data?.data;
-            console.log(res);
-            setChanged(!changed)
-        })
-        .catch(err => {
-            console.log(err);
-        })
+
+        axiosPublic.patch('/task', data)
+            .then(data => {
+                const res = data?.data;
+                console.log(res, 'patch');
+                setChanged(!changed)
+                // navigate("/tasks-manager");
+                toast.success("Updated succesfully.")
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
 
@@ -56,20 +87,20 @@ const TasksManager = () => {
     return (
         <div className="max-w-[1280px] w-[95%] mx-auto py-4">
             <div>
-                <h2 className="text-2xl font-bold">My Dashboard</h2>
+                <h2 className="text-2xl font-bold">Edit Task</h2>
             </div>
             <div className="py-4">
                 <label className="form-control w-full">
                     <div className="label">
                         <span className="label-text">Task Title</span>
                     </div>
-                    <input onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full text-[14px]" />
+                    <input defaultValue={task?.title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full text-[14px]" />
                 </label>
                 <label className="form-control">
                     <div className="label">
                         <span className="label-text-alt text-[14px]">Task Descriptions</span>
                     </div>
-                    <textarea onChange={(e) => setDescription(e.target.value)} className="textarea textarea-bordered h-24 text-[14px]" placeholder="Task descriptions"></textarea>
+                    <textarea defaultValue={task?.description} onChange={(e) => setDescription(e.target.value)} className="textarea textarea-bordered h-24 text-[14px]" placeholder="Task descriptions"></textarea>
                 </label>
                 <div className="flex flex-col gap-5 md:flex-row items-start md:items-end justify-between">
                     <div className="flex justify-start items-end gap-4">
@@ -84,6 +115,7 @@ const TasksManager = () => {
                                     type="date"
                                     className="input input-bordered w-full"
                                     min={new Date().toISOString().split('T')[0]}
+                                    defaultValue={task?.deadline}
                                 />
                             </div>
                         </label>
@@ -91,7 +123,7 @@ const TasksManager = () => {
                             <div className="label">
                                 <span className="label-text-alt text-[14px]">Select Priority</span>
                             </div>
-                            <select required defaultValue={0} onChange={(e) => setPriority(e.target.value)} className="select select-bordered w-full max-w-xs">
+                            <select required defaultValue={task?.priority} onChange={(e) => setPriority(e.target.value)} className="select select-bordered w-full max-w-xs">
                                 <option disabled value="0" >Select Task Priority</option>
                                 <option value="1">Low</option>
                                 <option value="2">Moderate</option>
@@ -100,23 +132,15 @@ const TasksManager = () => {
                         </label>
                     </div>
                     <div className="w-full md:max-w-sm">
-                        <button onClick={handleTaskSubmit} className="btn btn-info text-white w-full md:max-w-sm">Add New Task</button>
+                        <button onClick={handleTaskSubmit} className="btn btn-info text-white w-full md:max-w-sm">Update Task</button>
                     </div>
                 </div>
                 {
                     errMsg ? <h2 className="text-center text-red-700 text-sm mt-2">{errMsg}</h2> : ""
                 }
             </div>
-
-            <div></div>
-            <div className="divider"></div>
-
-            <div className="pb-14">
-                <h2 className="text-2xl font-bold my-3">My All Tasks</h2>
-                <TaskTable changed = {changed}></TaskTable>
-            </div>
         </div>
     );
 };
 
-export default TasksManager;
+export default EditTask;

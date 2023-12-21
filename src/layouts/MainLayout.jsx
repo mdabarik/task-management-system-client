@@ -1,3 +1,4 @@
+import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
 import { Outlet, useLocation } from "react-router-dom";
 
@@ -19,6 +20,14 @@ const MainLayout = () => {
             <div>
                 <Outlet></Outlet>
             </div>
+            {
+                location?.pathname == '/login' || location?.pathname == '/register' ?
+                    ""
+                    :
+                    <Footer></Footer>
+            }
+
+
         </div>
     );
 };
