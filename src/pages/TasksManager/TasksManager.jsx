@@ -3,9 +3,21 @@ import Loader from "../../components/Shared/Loader";
 import useAuth from "../../hooks/useAuth";
 import TaskTable from "./TaskTable";
 import useAxiosPublic from "./../../hooks/useAxiosPublic";
+import useAxiosSecure from "./../../hooks/useAxiosSecure";
+import { BottomNavigation, BottomNavigationAction } from "@mui/material";
+import Home from "./TaskManagerHome";
+
 
 
 const TasksManager = () => {
+
+    const [value, setValue] = useState('recents');
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
+
     const axiosPublic = useAxiosPublic();
     const { user, loading } = useAuth();
     const [errMsg, setErrMsg] = useState();
@@ -14,6 +26,7 @@ const TasksManager = () => {
     const [description, setDescription] = useState();
     const [deadline, setDeadline] = useState();
     const [priority, setPriority] = useState();
+    const axiosSecure = useAxiosSecure();
 
     const handleTaskSubmit = () => {
         setErrMsg(null);
@@ -36,16 +49,16 @@ const TasksManager = () => {
         const data = {
             title, description, deadline, priority, status: 'ongoing', email: user?.email
         }
-        
-        axiosPublic.post('/task', data)
-        .then(data => {
-            const res = data?.data;
-            console.log(res);
-            setChanged(!changed)
-        })
-        .catch(err => {
-            console.log(err);
-        })
+
+        axiosSecure.post('/task', data)
+            .then(data => {
+                const res = data?.data;
+                console.log(res);
+                setChanged(!changed)
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
 
@@ -56,9 +69,10 @@ const TasksManager = () => {
     return (
         <div className="max-w-[1280px] w-[95%] mx-auto py-4">
             <div>
-                <h2 className="text-2xl font-bold">My Dashboard</h2>
+                <h2 className="text-xl font-bold">Add New Task</h2>
             </div>
-            <div className="py-4">
+
+            <div className="py-3">
                 <label className="form-control w-full">
                     <div className="label">
                         <span className="label-text">Task Title</span>
@@ -113,8 +127,9 @@ const TasksManager = () => {
 
             <div className="pb-14">
                 <h2 className="text-2xl font-bold my-3">My All Tasks</h2>
-                <TaskTable changed = {changed}></TaskTable>
+                <TaskTable changed={changed}></TaskTable>
             </div>
+
         </div>
     );
 };

@@ -3,6 +3,7 @@ import Loader from "../../components/Shared/Loader";
 import useAuth from "../../hooks/useAuth";
 import TaskTable from "./TaskTable";
 import useAxiosPublic from "./../../hooks/useAxiosPublic";
+import useAxiosSecure from "./../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -11,6 +12,7 @@ import toast from "react-hot-toast";
 
 const EditTask = () => {
     const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
     const { user, loading } = useAuth();
     const [errMsg, setErrMsg] = useState();
     const [changed, setChanged] = useState(true);
@@ -25,7 +27,7 @@ const EditTask = () => {
     const { data: task, isLoading, refetch } = useQuery({
         queryKey: ['get-single-task', changed, user, id],
         queryFn: async () => {
-            const { data } = await axiosPublic.get(`/task?id=${id}&email=${user?.email}`);
+            const { data } = await axiosSecure.get(`/task?id=${id}&email=${user?.email}`);
             console.log('task found', data);
             return data;
         }
@@ -66,7 +68,7 @@ const EditTask = () => {
             return;
         }
 
-        axiosPublic.patch('/task', data)
+        axiosSecure.patch('/task', data)
             .then(data => {
                 const res = data?.data;
                 console.log(res, 'patch');
@@ -81,7 +83,7 @@ const EditTask = () => {
 
 
     // if (loading || !user) return <p>Loading...</p>
-    if (loading || !user) return <Loader></Loader>
+    // if (loading || !user) return <Loader></Loader>
 
 
     return (

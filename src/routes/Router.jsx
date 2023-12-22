@@ -7,6 +7,7 @@ import Register from "../pages/Register/Register";
 import Login from "../pages/Login/Login";
 import PrivateRoute from "./PrivateRoute";
 import EditTask from "../pages/TasksManager/EditTask";
+import TaskManagerHome from "../pages/TasksManager/TaskManagerHome";
 
 const router = createBrowserRouter([
     {
@@ -20,7 +21,9 @@ const router = createBrowserRouter([
             },
             {
                 path: '/tasks-manager',
-                element: <PrivateRoute><TasksManager></TasksManager></PrivateRoute>
+                element: <PrivateRoute>
+                    <TaskManagerHome></TaskManagerHome>
+                </PrivateRoute>
             },
             {
                 path: '/register',

@@ -14,8 +14,8 @@ import AuthProvider from './providers/AuthProvider.jsx'
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <div className='w-full h-full mx-auto bg-[#f8f8f8]'>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <div className='w-full h-full mx-auto bg-[#f8f8f8]'>
       <React.StrictMode>
         <AuthProvider>
           <Toaster />
@@ -24,6 +24,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           </HelmetProvider>
         </AuthProvider>
       </React.StrictMode>
-    </QueryClientProvider>
-  </div>
+    </div>
+  </QueryClientProvider>
 )

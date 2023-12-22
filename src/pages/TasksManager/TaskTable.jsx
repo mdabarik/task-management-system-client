@@ -12,10 +12,13 @@ import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import useAxiosSecure from "./../../hooks/useAxiosSecure";
+
 
 
 export default function TaskTable({ changed, setChanged }) {
     const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
 
     const navigate = useNavigate();
@@ -23,7 +26,7 @@ export default function TaskTable({ changed, setChanged }) {
     const { data: tasks, refetch } = useQuery({
         queryKey: ['get all task', changed, user],
         queryFn: async () => {
-            const { data } = await axiosPublic.get(`/tasks?email=${user?.email}`);
+            const { data } = await axiosSecure.get(`/tasks?email=${user?.email}`);
             console.log('task found', data);
             return data;
         }
@@ -64,7 +67,7 @@ export default function TaskTable({ changed, setChanged }) {
     }
 
     const handleComplete = (id) => {
-        axiosPublic.patch(`/update?id=${id}&email=${user?.email}`)
+        axiosSecure.patch(`/update?id=${id}&email=${user?.email}`)
             .then(data => {
                 refetch();
                 console.log(data?.data);
