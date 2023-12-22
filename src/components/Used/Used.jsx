@@ -1,7 +1,19 @@
+import 'aos/dist/aos.css';
+import AOS from "aos";
+import { useEffect } from "react";
 
 const Used = () => {
+    useEffect(() => {
+        AOS.init({
+            offset: 200,
+            duration: 600,
+            easing: 'ease-in-sine',
+            delay: 100,
+        })
+    }, [])
+
     return (
-        <div className="max-w-[1280px] w-[95%] mx-auto flex flex-col items-center justify-center">
+        <div className="max-w-[1280px] w-[95%] mx-auto flex flex-col items-center justify-center" data-aos="zoom-in">
             <h2 className="text-center font-bold text-2xl my-5">Our App User</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <div className="bg-white drop-shadow-lg text-center text-black p-4 rounded-lg">

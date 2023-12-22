@@ -1,10 +1,24 @@
 import { Link } from "react-router-dom";
 import BannerBg from "./../../assets/banner.jpg";
 // import { Button } from "@mui/material";
+import 'aos/dist/aos.css';
+import AOS from "aos";
+import { useEffect } from "react";
 
 const Banner = () => {
+
+    useEffect(() => {
+        AOS.init({
+            offset: 200,
+            duration: 600,
+            easing: 'ease-in-sine',
+            delay: 100,
+        })
+    }, [])
+
+
     return (
-        <div className="relative max-w-[1280px] mx-auto">
+        <div className="relative max-w-[1280px] mx-auto" data-aos="zoom-in">
             <img className="h-[550px] object-cover w-full" src={BannerBg} alt="banner bg" />
             {/* <div className="bg-[#00000090] z-20 w-full h-[550px] absolute top-0 left-0"></div>
             <div className="absolute top-0 text-white left-0 h-[550px] space-y-3 w-full flex flex-col items-center justify-center">
