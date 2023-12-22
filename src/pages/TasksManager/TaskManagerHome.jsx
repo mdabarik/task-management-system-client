@@ -1,6 +1,8 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
 import TasksManager from "./TasksManager";
+import OngoingTask from "./OngoingTask";
+import CompletedTask from "./CompletedTask";
 
 
 function CustomTabPanel(props) {
@@ -54,10 +56,10 @@ export default function TaskManagerHome() {
           <TasksManager></TasksManager>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          Item Two
+          <OngoingTask></OngoingTask>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
-          Item Three
+          <CompletedTask></CompletedTask>
         </CustomTabPanel>
       </Box>
     </div>

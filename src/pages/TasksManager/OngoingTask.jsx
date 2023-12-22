@@ -15,8 +15,7 @@ import { useNavigate } from "react-router-dom";
 import useAxiosSecure from "./../../hooks/useAxiosSecure";
 
 
-
-export default function TaskTable({ changed, setChanged }) {
+export default function OngoingTask() {
     const axiosPublic = useAxiosPublic();
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
@@ -24,17 +23,17 @@ export default function TaskTable({ changed, setChanged }) {
     const navigate = useNavigate();
 
     const { data: tasks, refetch } = useQuery({
-        queryKey: ['get all task', changed, user],
+        queryKey: ['get all task', user],
         queryFn: async () => {
             const { data } = await axiosSecure.get(`/tasks?email=${user?.email}`);
-            console.log('task found', data);
-            return data;
+            const filtered = data.filter(task => task?.status == 'ongoing');
+            console.log('task found', filtered);
+            return filtered;
         }
     })
 
-
     const handleDelete = (id) => {
-        console.log(id, 'id');
+        // console.log(id, 'id');
 
         Swal.fire({
             title: "Are you sure?",
@@ -46,18 +45,11 @@ export default function TaskTable({ changed, setChanged }) {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                // Swal.fire({
-                //     title: "Deleted!",
-                //     text: "Your file has been deleted.",
-                //     icon: "success"
-                // });
                 axiosPublic.delete(`/task?id=${id}`)
                     .then(data => {
                         refetch();
                         console.log(data?.data);
                         toast.success('deleted successfully');
-                        setChanged(!changed)
-
                     })
                     .catch(err => {
                         console.log(err);
@@ -72,8 +64,6 @@ export default function TaskTable({ changed, setChanged }) {
                 refetch();
                 console.log(data?.data);
                 toast.success('Updated successfully');
-                setChanged(!changed)
-
             })
             .catch(err => {
                 console.log(err);
@@ -110,11 +100,7 @@ export default function TaskTable({ changed, setChanged }) {
                                         <TableCell align="right">{task.priority == "1" ? "Low" : task?.priority == "2" ? "Moderate" : "High"}</TableCell>
                                         <TableCell align="right">{moment(task?.deadline).format("MMM Do YY")}</TableCell>
                                         <TableCell align="center">
-                                            {task?.status == 'ongoing' ?
                                             <span className="px-3 py-[2px] bg-orange-500 text-white rounded-full">{task?.status}</span>
-                                            :
-                                            <span className="bg-[green] text-white rounded-full px-3 py-[2px]">{task?.status}</span>
-                                            }
                                         </TableCell>
                                         <TableCell align="center">
                                             <div className="flex  items-center justify-center">
