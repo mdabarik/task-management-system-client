@@ -2,23 +2,12 @@ import { useState } from "react";
 import Loader from "../../components/Shared/Loader";
 import useAuth from "../../hooks/useAuth";
 import TaskTable from "./TaskTable";
-import useAxiosPublic from "./../../hooks/useAxiosPublic";
 import useAxiosSecure from "./../../hooks/useAxiosSecure";
-import { BottomNavigation, BottomNavigationAction } from "@mui/material";
-import Home from "./TaskManagerHome";
-
+import { useForm } from "react-hook-form"
+import DragDrop from "../../components/DragDrop/DragDrop";
 
 
 const TasksManager = () => {
-
-    const [value, setValue] = useState('recents');
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-
-
-    const axiosPublic = useAxiosPublic();
     const { user, loading } = useAuth();
     const [errMsg, setErrMsg] = useState();
     const [changed, setChanged] = useState(true);
@@ -27,6 +16,17 @@ const TasksManager = () => {
     const [deadline, setDeadline] = useState();
     const [priority, setPriority] = useState();
     const axiosSecure = useAxiosSecure();
+
+    const onSubmit = (data) => console.log(data)
+
+    // react form hooks
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
+
 
     const handleTaskSubmit = () => {
         setErrMsg(null);
@@ -47,7 +47,7 @@ const TasksManager = () => {
             return;
         }
         const data = {
-            title, description, deadline, priority, status: 'ongoing', email: user?.email
+            title, description, deadline, priority, status: 'todo', email: user?.email
         }
 
         axiosSecure.post('/task', data)
@@ -72,12 +72,16 @@ const TasksManager = () => {
                 <h2 className="text-xl font-bold">Add New Task</h2>
             </div>
 
-            <div className="py-3">
+            <form onSubmit={handleSubmit(onSubmit)} className="py-3">
                 <label className="form-control w-full">
                     <div className="label">
                         <span className="label-text">Task Title</span>
                     </div>
-                    <input onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Type here" className="input input-bordered w-full text-[14px]" />
+                    <input
+                        {...register("taskTitle", { required: true })}
+                        onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Type task title" className="input input-bordered w-full text-[14px]" />
+                    {errors?.taskTitle && <span>This field is required</span>}
+
                 </label>
                 <label className="form-control">
                     <div className="label">
@@ -114,15 +118,17 @@ const TasksManager = () => {
                         </label>
                     </div>
                     <div className="w-full md:max-w-sm">
-                        <button onClick={handleTaskSubmit} className="btn btn-info text-white w-full md:max-w-sm">Add New Task</button>
+                        <button type="submit" onClick={handleTaskSubmit} className="btn btn-info text-white w-full md:max-w-sm">Add New Task</button>
                     </div>
                 </div>
                 {
                     errMsg ? <h2 className="text-center text-red-700 text-sm mt-2">{errMsg}</h2> : ""
                 }
-            </div>
+            </form>
 
             <div></div>
+            <div className="divider"></div>
+            <DragDrop></DragDrop>
             <div className="divider"></div>
 
             <div className="pb-14">
